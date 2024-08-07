@@ -13,7 +13,7 @@ Socio is a simple social network application that allows users to create posts a
 1. Clone the repository
 
    ```bash
-   git clone
+   git clone https://github.com/asmaahamid02/socio-django.git
    ```
 
 2. Create virtual environment (optional)
