@@ -136,3 +136,5 @@ static/
 
 pipfile.lock
 pipfile
+
+node_modules/
