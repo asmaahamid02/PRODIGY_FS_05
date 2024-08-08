@@ -38,6 +38,7 @@ Socio is a simple social network application that allows users to create posts a
 
    ```bash
    pip install -r requirements.txt
+   npm install
    ```
 
 5. Create a database in MySQL
@@ -74,4 +75,10 @@ Socio is a simple social network application that allows users to create posts a
 
     ```bash
     python manage.py runserver
+    ```
+
+11. Collect static files
+
+    ```bash
+    python manage.py collectstatic
     ```
