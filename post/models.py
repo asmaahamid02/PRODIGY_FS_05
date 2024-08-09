@@ -9,6 +9,6 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.id} - {self.author.username}"
+        return f"{self.id} - {self.author.username} - {self.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
     
 
