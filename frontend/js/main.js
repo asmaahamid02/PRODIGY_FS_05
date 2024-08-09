@@ -48,9 +48,10 @@ $(document).ready(function () {
         sidebar.addClass('-translate-x-full')
       }
     })
-    .on('click', '.new-post-modal-toggle', function (e) {
+    .on('click', '.modal-toggler', function (e) {
       e.preventDefault()
-      toggle_modal()
+      console.log('clicked')
+      toggle_modal($(this).data('modal-toggle'))
     })
     .on('change', '#post-image', function (e) {
       const file = $(this)[0].files[0]
@@ -87,7 +88,7 @@ $(document).ready(function () {
         },
         error: (error) => {
           console.error('Post Form Error:', error)
-          toggle_message('open', error.responseJSON.__all__[0])
+          toggle_message('open', error.responseJSON.errors[0])
         },
       })
     })
@@ -114,6 +115,6 @@ function reset_form() {
   $('#post-image-preview').attr('src', $('#post-image-preview').data('default'))
 }
 
-function toggle_modal() {
-  $('#new-post-modal').toggleClass('hidden flex')
+function toggle_modal(selector = 'new-post-modal') {
+  $(`#${selector}`).toggleClass('hidden flex')
 }
