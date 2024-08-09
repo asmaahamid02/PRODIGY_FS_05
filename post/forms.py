@@ -1,7 +1,6 @@
 from typing import Any
 from django import forms
 from .models import Post
-from django.core.exceptions import ValidationError
 
 class PostForm(forms.ModelForm):
     body = forms.CharField(max_length=500, required=False)    
@@ -18,6 +17,6 @@ class PostForm(forms.ModelForm):
 
         cleaned_data = super().clean()    
         if not cleaned_data.get('body') and not cleaned_data.get('image'):
-            raise ValidationError("The post must contain either a body or an image")
+            raise forms.ValidationError("The post must contain either a body or an image")
         
         return cleaned_data
