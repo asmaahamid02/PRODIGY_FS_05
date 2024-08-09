@@ -19,9 +19,9 @@ def post_create_view(request: HttpRequest) -> HttpResponse | JsonResponse:
             post.save()
             return render(request, 'components/post-card.html', {"post": post}, content_type='application/html')
         else:
-            return JsonResponse(form.errors, status=400)
+            return JsonResponse({'errors': list(form.errors.values())}, status=400)
     else:
-        return JsonResponse({"error": "Method not allowed"}, status=405)
+        return JsonResponse({'errors': ['Invalid request method']}, status=405)
 
 
         
