@@ -4,7 +4,7 @@ from .models import Post
 from .forms import PostForm
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+@login_required
 def index_view(request: HttpRequest) -> HttpResponse:
     posts = Post.objects.order_by('-created_at').all()[:30]
     return render(request, 'posts/index.html', {"posts": posts})
