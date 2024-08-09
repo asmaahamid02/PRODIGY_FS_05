@@ -46,7 +46,7 @@
             </a>
           </li>
           <li>
-            <button type="button" data-modal-target="new-post-modal" data-modal-toggle="new-post-modal" class="new-post-modal-toggle flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+            <button type="button" data-modal-target="new-post-modal" data-modal-toggle="new-post-modal" class="modal-toggler flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 5V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M9 3v4a1 1 0 0 1-1 1H4m11.383.772 2.745 2.746m1.215-3.906a2.089 2.089 0 0 1 0 2.953l-6.65 6.646L9 17.95l.739-3.692 6.646-6.646a2.087 2.087 0 0 1 2.958 0Z" />
               </svg>
@@ -55,12 +55,12 @@
           </li>
           {% if request.user.is_authenticated %}
             <li>
-              <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+              <button type="button" data-modal-target="logout-modal" data-modal-toggle="logout-modal" class="modal-toggler flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
                 <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
                 </svg>
                 <span class="flex-1 ms-3 whitespace-nowrap">Logout</span>
-              </a>
+              </button>
             </li>
           {% else %}
             <li>
@@ -83,11 +83,11 @@
         </ul>
       </div>
     </aside>
-    <div class="p-4 sm:ml-64">
+    <main class="p-4 sm:ml-64">
       {% block body %}
 
       {% endblock %}
-    </div>
+    </main>
     <!-- Main modal -->
     <div id="new-post-modal" tabindex="-1" aria-hidden="true" class="hidden bg-black/70 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full max-h-full">
       <div class="relative p-4 w-full max-w-md max-h-full post-modal-inner">
@@ -96,7 +96,7 @@
           <!-- Modal header -->
           <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
             <h3 class="text-lg font-semibold text-gray-900">Create New Post</h3>
-            <button type="button" class="new-post-modal-toggle text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="new-post-modal">
+            <button type="button" class="modal-toggler text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="new-post-modal">
               <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
               </svg>
@@ -129,6 +129,39 @@
                 <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
               </svg>Post
             </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout alert modal -->
+    <div id="logout-modal" tabindex="-1" aria-hidden="true" class="hidden bg-black/70 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full max-h-full">
+      <div class="relative p-4 w-full max-w-md max-h-full post-modal-inner">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow">
+          <!-- Modal header -->
+          <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+            <h3 class="text-lg font-semibold text-gray-900">Logout Socio</h3>
+            <button type="button" class="modal-toggler text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="logout-modal">
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+              </svg>
+              <span class="sr-only">Close modal</span>
+            </button>
+          </div>
+          <!-- Modal body -->
+          <form class="p-4 md:p-5" id="logout-form" action="{% url 'account:logout' %}" method="post">
+            {% csrf_token %}
+            <div class="grid gap-4 mb-4 grid-cols-1">
+              <div>
+                <p class="text-gray-900">Are you sure you want to logout?</p>
+              </div>
+            </div>
+
+            <div class="flex justify-end items-center gap-2">
+              <button type="button" class="bg-gray-200 text-gray-900 hover:bg-gray-300 rounded-lg text-sm px-5 py-2.5 font-medium text-center" data-modal-toggle="logout-modal">Cancel</button>
+              <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Logout</button>
+            </div>
           </form>
         </div>
       </div>
