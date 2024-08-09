@@ -1,7 +1,13 @@
-{% extends "_base.html" %} 
+{% extends '_base.html' %}
 
-{% block title %} Socio | Home {% endblock %}
+{% block title %}
+  Socio | Home
+{% endblock %}
 
-{% block body %} 
-<h1>Home Page</h2>
+{% block body %}
+  <section class="posts-container max-w-2xl p-4 sm:px-6 lg:px-8 sm:py-10 mx-auto flex flex-col justify-center items-center gap-4">
+    {% for post in posts %}
+      {% include 'components/post-card.html' with post=post %}
+    {% endfor %}
+  </section>
 {% endblock %}
