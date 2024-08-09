@@ -1,0 +1,26 @@
+<div class="post-card bg-white w-full rounded-lg shadow-lg overflow-hidden">
+  <div class="p-4">
+    <div class="flex items-center justify-between gap-2">
+      <div class="flex items-center gap-4">
+        <img class="w-10 h-10 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_tMDmGpdUANiBhrYP30GLPrVvcNZed4sTeA&s" alt="" />
+        <div>
+          <h4 class="font-medium text-gray-900">{{ post.author.username }}</h4>
+          <small class="text-xs text-gray-500">{{ post.created_at|date:'M d, Y h:i A' }}</small>
+        </div>
+      </div>
+      <button class="border-emerald-600 border-2 text-emerald-600 hover:bg-emerald-600 hover:text-white px-4 py-1 rounded-lg">Follow</button>
+    </div>
+
+    <!-- Body -->
+    {% if post.body %}
+      <p class="text-gray-700 my-4">{{ post.body }}</p>
+    {% endif %}
+  </div>
+
+  <!-- Image -->
+  {% if post.image %}
+    <div class="relative w-full h-96">
+      <img class="w-full h-full object-cover" src="{{ post.image.url }}" alt="{{ post.author.username }}" />
+    </div>
+  {% endif %}
+</div>
