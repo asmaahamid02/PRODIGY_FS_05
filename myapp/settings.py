@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     #packages
     'django_browser_reload',
+    'django_extensions',
 
     # apps
     'post.apps.PostConfig',
