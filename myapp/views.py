@@ -16,7 +16,7 @@ def generate_thumbnail(request:HttpRequest, size: str, path:str) -> HttpResponse
     try:
         image = Image.open(path)
     except Exception as e:
-        return HttpResponse(f"An error occured while opening the image: {e}", status=500)
+        return HttpResponse(f"An error occurred while opening the image: {e}", status=500)
 
     sizes = size.split('x')
 
@@ -24,7 +24,7 @@ def generate_thumbnail(request:HttpRequest, size: str, path:str) -> HttpResponse
         width = int(sizes[0])
         height = int(sizes[1]) if len(sizes) > 1 else None
     except Exception as e:
-        return HttpResponse(f"An error occured while parsing the size: {e}", status=500)
+        return HttpResponse(f"An error occurred while parsing the size: {e}", status=500)
     
     if height is None:
         height = int(image.height * width / image.width)

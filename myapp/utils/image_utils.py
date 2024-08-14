@@ -40,7 +40,7 @@ def create_thumbnails(path: str, sizes: list[tuple[int, ...]], format: str = 'we
     if counter > 0:        
         return {"status": "success", "message": f"{counter} thumbnails were created for '{image_name}{image_extension}' image"}        
     
-    return {"status": "fail", "message": f"An error occured while creating thumbnails for '{image_name}{image_extension}' image!"}        
+    return {"status": "fail", "message": f"An error occurred while creating thumbnails for '{image_name}{image_extension}' image!"}        
     
 def resize_image(image, size: tuple[int, int] = (800,), format:str = 'webp') -> File | dict[str, str]:  
     format = format.lower()
