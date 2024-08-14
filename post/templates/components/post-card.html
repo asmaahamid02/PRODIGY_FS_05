@@ -19,8 +19,18 @@
 
   <!-- Image -->
   {% if post.image %}
-    <div class="relative w-full h-96">
-      <img class="w-full h-full object-cover" src="{{ post.image.url }}" alt="{{ post.author.username }}" />
+    <div class="relative w-full">
+      <picture>
+        <!-- Large screens -->
+        <source srcset="{% url 'generate_thumbnail' '608' post.image.url|urlencode %}" type="image/webp" media="(min-width: 1024px)" />
+        <!-- Ipad screens -->
+        <source srcset="{% url 'generate_thumbnail' '474' post.image.url|urlencode %}" type="image/webp" media="(min-width: 768px)" />
+        <!-- Mobile screens -->
+        <source srcset="{% url 'generate_thumbnail' '348' post.image.url|urlencode %}" type="image/webp" media="(max-width: 640px)" />
+        <img class="w-full" src="{{ post.image.url }}" alt="{{ post.author.username }}" />
+      </picture>
+      <img class="w-full" src="{{ post.image.url }}" alt="{{ post.author.username }}" />
+      <img src="{% url 'generate_thumbnail' '600' post.image.url|urlencode %}" alt="Thumbnail" />
     </div>
   {% endif %}
 </div>
