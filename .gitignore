@@ -134,7 +134,4 @@ dmypy.json
 media/
 static/
 
-pipfile.lock
-pipfile
-
 node_modules/
