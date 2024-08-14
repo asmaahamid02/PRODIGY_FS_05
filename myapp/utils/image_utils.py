@@ -42,7 +42,7 @@ def create_thumbnails(path: str, sizes: list[tuple[int, ...]], format: str = 'we
     
     return {"status": "fail", "message": f"An error occured while creating thumbnails for '{image_name}{image_extension}' image!"}        
     
-def rezize_image(image, size: tuple[int, int] = (800,), format:str = 'webp') -> File | dict[str, str]:  
+def resize_image(image, size: tuple[int, int] = (800,), format:str = 'webp') -> File | dict[str, str]:  
     format = format.lower()
 
     if format not in allowed_formats:
