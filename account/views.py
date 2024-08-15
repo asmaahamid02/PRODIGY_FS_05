@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse
 from .forms import RegisterForm
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from .forms import UserProfileForm
 
 def register_view(request: HttpRequest) -> HttpResponse:
     form = RegisterForm()
@@ -44,9 +46,28 @@ def login_view(request: HttpRequest) -> HttpResponse:
     print(error_message)
     return render(request, 'accounts/login.html', {'error': error_message})    
 
+@login_required
 def logout_view(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         logout(request)
         return redirect('account:login')
     else:
         return redirect('/')
+
+@login_required
+def update_profile_view(request: HttpRequest) -> HttpResponse:
+    user = request.user
+    form = UserProfileForm(instance=user)
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user)
+
+        if form.is_valid():
+            form.save(commit=True)
+
+            return render(request, 'accounts/update_profile.html', {
+                'form': form,
+                'message': 'Profile updated successfully'
+            })
+
+    return render(request, 'accounts/update_profile.html', {'form': form})
