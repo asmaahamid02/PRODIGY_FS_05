@@ -53,12 +53,28 @@ $(document).ready(function () {
       console.log('clicked')
       toggle_modal($(this).data('modal-toggle'))
     })
-    .on('change', '#post-image', function (e) {
+    .on('click', '.alert-close', function (e) {
+      e.preventDefault()
+      $(this).parent('.alert').hide()
+    })
+    .on('change', '.file-input', function (e) {
       const file = $(this)[0].files[0]
       const reader = new FileReader()
+      const fileInput = $(this)
+      const parent = fileInput.parent('.file-input-group')
+      const placeholder = parent.find('.file-placeholder')
+      const placeholderIcon = parent.find('.file-icon')
 
       reader.onload = function (readerEvent) {
-        $('#post-image-preview').attr('src', readerEvent.target.result)
+        placeholder.attr('src', readerEvent.target.result)
+
+        if (placeholder.hasClass('hidden')) {
+          placeholder.removeClass('hidden')
+        }
+
+        if (placeholderIcon && !placeholderIcon.hasClass('hidden')) {
+          placeholderIcon.addClass('hidden')
+        }
       }
 
       reader.readAsDataURL(file)
@@ -78,7 +94,13 @@ $(document).ready(function () {
           toggle_message('close') //error message
           toggle_message('open', '', 'success')
 
+          const pathname = window.location.pathname
+
           setTimeout(() => {
+            //if not home page, redirect to home page
+            if (pathname !== '/') {
+              window.location.href = '/'
+            }
             toggle_message('close', '', 'success')
             reset_form()
             toggle_modal()
@@ -99,7 +121,7 @@ function toggle_message(action = 'open', message = '', type = 'error') {
     type === 'error' ? $('.post-error-message') : $('.post-success-message')
 
   if (type === 'error') {
-    $selector.text(message)
+    $selector.children('.alert-message').text(message)
   }
 
   if (action === 'open') {
