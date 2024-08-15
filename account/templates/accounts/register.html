@@ -23,40 +23,28 @@
       <div class="block md:flex space-x-2">
         <div>
           <input type="text" name="first_name" id="first_name" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500" placeholder="John" value="{{ form.first_name.value|default_if_none:'' }}" />
-          {% for error in form.first_name.errors %}
-            <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-          {% endfor %}
+          {% include 'components/input-error-label.html' with errors=form.first_name.errors %}
         </div>
         <div>
           <input type="text" name="last_name" id="last_name" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500" placeholder="Doe" value="{{ form.last_name.value|default_if_none:'' }}" />
-          {% for error in form.last_name.errors %}
-            <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-          {% endfor %}
+          {% include 'components/input-error-label.html' with errors=form.last_name.errors %}
         </div>
       </div>
       <div>
         <input type="text" name="username" id="username" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500" placeholder="johnduo123" required="" value="{{ form.username.value|default_if_none:'' }}" />
-        {% for error in form.username.errors %}
-          <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-        {% endfor %}
+        {% include 'components/input-error-label.html' with errors=form.username.errors %}
       </div>
       <div>
         <input type="email" name="email" id="email" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500" placeholder="john@example.com" required="" value="{{ form.email.value|default_if_none:'' }}" />
-        {% for error in form.email.errors %}
-          <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-        {% endfor %}
+        {% include 'components/input-error-label.html' with errors=form.email.errors %}
       </div>
       <div>
         <input type="password" name="password" id="password" placeholder="••••••••" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500" required="" />
-        {% for error in form.password.errors %}
-          <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-        {% endfor %}
+        {% include 'components/input-error-label.html' with errors=form.password.errors %}
       </div>
       <div>
         <input type="password" name="password_confirm" id="password_confirm" placeholder="••••••••" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500" required="" />
-        {% for error in form.password_confirm.errors %}
-          <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-        {% endfor %}
+        {% include 'components/input-error-label.html' with errors=form.password_confirm.errors %}
       </div>
       <button type="submit" class="w-full text-white bg-emerald-600 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create account</button>
       <p class="text-sm font-light text-gray-500">

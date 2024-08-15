@@ -11,7 +11,7 @@
       {% csrf_token %}
 
       {% if error %}
-        <div class="p-4 my-2 text-sm text-red-800 rounded-lg bg-red-50" role="alert">{{ error }}</div>
+        {% include 'components/alert.html' with message=error category='red' type='Error' %}
       {% endif %}
 
       <div>
