@@ -29,8 +29,6 @@
         <source srcset="{% url 'generate_thumbnail' '348' post.image.url|urlencode %}" type="image/webp" media="(max-width: 640px)" />
         <img class="w-full" src="{{ post.image.url }}" alt="{{ post.author.username }}" />
       </picture>
-      <img class="w-full" src="{{ post.image.url }}" alt="{{ post.author.username }}" />
-      <img src="{% url 'generate_thumbnail' '600' post.image.url|urlencode %}" alt="Thumbnail" />
     </div>
   {% endif %}
 </div>

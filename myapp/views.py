@@ -1,10 +1,9 @@
 from django.http import HttpRequest, HttpResponse
 from PIL import Image
 from io import BytesIO
-from .utils import image_utils
 from urllib.parse import unquote
-import os
 from django.conf import settings
+from django.core.cache import cache
 
 def generate_thumbnail(request:HttpRequest, size: str, path:str) -> HttpResponse:
     if not size or not path:
@@ -29,11 +28,24 @@ def generate_thumbnail(request:HttpRequest, size: str, path:str) -> HttpResponse
     if height is None:
         height = int(image.height * width / image.width)
 
+    filename = "_".join(path.split('/')[-4:])
+    # generate a cache key for the thumbnail
+    cache_key = f"thumbnail_{filename}_{width}x{height}"
+
+    # check if the thumbnail is already in the cache
+    cache_thumbnail = cache.get(cache_key)
+    if cache_thumbnail:
+        print(f"Cache hit for {cache_key}")
+        return HttpResponse(cache_thumbnail, content_type=f"image/webp")
+
     image.thumbnail((width, height))
 
     thumbnail_io = BytesIO()
     image.save(thumbnail_io, format='webp', quality=90)
     thumbnail_io.seek(0)
+
+    # save the thumbnail in the cache
+    cache.set(cache_key, thumbnail_io.getvalue(), timeout=60*60*24) # cache for 24 hours
 
     return HttpResponse(thumbnail_io, content_type=f"image/webp")
     

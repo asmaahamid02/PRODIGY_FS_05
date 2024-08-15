@@ -1,17 +1,12 @@
-from typing import Iterable
 from django.db import models
 from django.contrib.auth.models import User
-import uuid
 from typing import Any
-from datetime import datetime
 from myapp.utils import image_utils
-import os
+from myapp.utils.helper_utils import generate_unique_folder_name
 
 class Post(models.Model):
     def image_upload(self, filename):
-        #generate a unique folder name
-        unique_folder = uuid.uuid4().hex[:6].upper() + '_' + datetime.now().strftime('%Y%m%d%H%M%S')
-        return f"posts/{self.author.id}/{unique_folder}/{filename}"
+        return f"posts/{self.author.id}/{generate_unique_folder_name()}/{filename}"
         
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
     body = models.CharField(max_length=500)

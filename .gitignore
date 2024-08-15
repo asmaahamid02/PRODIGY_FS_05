@@ -135,3 +135,5 @@ media/
 static/
 
 node_modules/
+
+cache/
