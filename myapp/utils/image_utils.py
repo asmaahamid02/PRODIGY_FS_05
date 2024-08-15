@@ -51,10 +51,13 @@ def resize_image(image, size: tuple[int, int] = (800,), format:str = 'webp') -> 
     original_image = Image.open(image)
     width, height = _get_dimensions(size, original_image)
 
+    if width == original_image.width:
+        return image
+
     original_image.thumbnail((width, height))
 
     image_io = BytesIO()
-    original_image.save(image_io, format, quality=90)
+    original_image.save(image_io, format)
     new_image = File(image_io, name=image.name)
 
     return new_image
@@ -66,8 +69,11 @@ def validate_image_size(image, max_size:int = 5) -> None | ValidationError: # in
         return ValidationError(f"Image size should not exceed {max_size}MB")
         
 def _get_dimensions(size: tuple[int, int], original_image: Image) -> tuple[int, int]:
-    width = size[0]
+    width = size[0] if size[0] < original_image.width else original_image.width
     height = size[1] if len(size) > 1 else None
+
+    if width == original_image.width and height is None:
+        return (width, original_image.height)
 
     # if no heigh is provided, calculate it based on the width (maintain the aspect ratio) 
     if height is None:
