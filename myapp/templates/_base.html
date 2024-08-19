@@ -38,7 +38,7 @@
             </a>
           </li>
           <li>
-            <a href="{% url 'account:update_profile' %}" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+            <a href="{% url 'accounts:update_profile' %}" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
               </svg>
@@ -105,7 +105,7 @@
           </div>
           <!-- Modal body -->
           <!-- Error/Success -->
-          <form class="p-4 md:p-5" id="post-form" data-url="{% url 'post:create' %}">
+          <form class="p-4 md:p-5" id="post-form" data-url="{% url 'posts:create' %}">
             {# Error message #}
             {% include 'components/alert.html' with category='red' type='Error' class='post-error-message hidden' %}
             {# Success message #}
@@ -152,7 +152,7 @@
             </button>
           </div>
           <!-- Modal body -->
-          <form class="p-4 md:p-5" id="logout-form" action="{% url 'account:logout' %}" method="post">
+          <form class="p-4 md:p-5" id="logout-form" action="{% url 'accounts:logout' %}" method="post">
             {% csrf_token %}
             <div class="grid gap-4 mb-4 grid-cols-1">
               <div>

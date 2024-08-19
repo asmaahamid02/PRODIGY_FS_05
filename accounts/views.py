@@ -50,7 +50,7 @@ def login_view(request: HttpRequest) -> HttpResponse:
 def logout_view(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         logout(request)
-        return redirect('account:login')
+        return redirect('accounts:login')
     else:
         return redirect('/')
 
