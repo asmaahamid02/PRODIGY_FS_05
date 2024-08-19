@@ -28,7 +28,7 @@ class UserProfileForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'email', 'username']    
 
-    bio = forms.CharField(widget=forms.Textarea, required=False)
+    bio = forms.CharField(required=False)
     profile_image = forms.ImageField(required=False)
     cover_image = forms.ImageField(required=False)    
 
@@ -54,13 +54,13 @@ class UserProfileForm(forms.ModelForm):
                 if hasattr(old_profile_image, 'path') and os.path.exists(old_profile_image.path):
                     dir = old_profile_image.path.rsplit('/', 1)[0]
                     if os.path.exists(dir) and os.path.isdir(dir):
-                        shutil.rmtree(old_profile_image.path.rsplit('/', 1)[0])
+                        shutil.rmtree(dir)
 
             if self.cleaned_data.get('cover_image') and old_cover_image:
                 if hasattr(old_cover_image, 'path') and os.path.exists(old_cover_image.path):
                     dir = old_cover_image.path.rsplit('/', 1)[0]
                     if os.path.exists(dir) and os.path.isdir(dir):
-                        shutil.rmtree(old_cover_image.path.rsplit('/', 1)[0])
+                        shutil.rmtree(dir)
             
         return user
 
