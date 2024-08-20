@@ -6,7 +6,6 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from typing import Any
 
-# Create your models here.
 class Profile(models.Model):
     def upload_path(self, filename:str) -> str:
         return f"profiles/{self.user.id}/{generate_unique_folder_name()}/{filename}"
@@ -15,7 +14,9 @@ class Profile(models.Model):
     cover_image = models.ImageField(upload_to=upload_path, blank=True, null=True, validators=[validate_image_size])
     profile_image = models.ImageField(upload_to=upload_path, blank=True, null=True, validators=[validate_image_size])
     bio = models.CharField(max_length=1000, blank=True, null=True)
-    likes_count = models.IntegerField(null=True, blank=True)
+    likes_count = models.IntegerField(default=0)
+    followers_count = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.user.username
