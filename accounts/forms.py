@@ -1,25 +1,23 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from typing import Any
 import os, shutil
 
-class RegisterForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, required=True)
-    password_confirm = forms.CharField(widget=forms.PasswordInput, required=True)
-    email = forms.EmailField(required=True)
-
+class RegisterForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password', 'password_confirm']
+        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
 
     def clean(self) -> dict[str, Any]:
         cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        password_confirm = cleaned_data.get('password_confirm')
+        email = cleaned_data.get('email')
 
-        if password and password_confirm and password != password_confirm:
-            raise forms.ValidationError("Passwords must match")
-        
+        if email:
+            found = User.objects.filter(email=email).exists()
+
+            if found:
+                self.add_error('email', forms.ValidationError('This email is used before.'))
         return cleaned_data
     
 

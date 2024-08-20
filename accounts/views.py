@@ -5,6 +5,7 @@ from .forms import RegisterForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 
 def register_view(request: HttpRequest) -> HttpResponse:
     form = RegisterForm()
@@ -13,13 +14,7 @@ def register_view(request: HttpRequest) -> HttpResponse:
         form = RegisterForm(request.POST)
 
         if form.is_valid():
-            first_name = request.POST.get('first_name')
-            last_name = request.POST.get('last_name')
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            email = request.POST.get('email')
-
-            user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+            user = form.save(commit=True)
 
             login(request, user)
 
@@ -71,3 +66,20 @@ def update_profile_view(request: HttpRequest) -> HttpResponse:
             })
 
     return render(request, 'accounts/update_profile.html', {'form': form})
+
+@login_required
+def change_password_view(request: HttpRequest) -> HttpResponse:
+    user = request.user
+    form = PasswordChangeForm(user)
+
+    if request.method == 'POST':
+        form = PasswordChangeForm(user, request.POST)
+
+        if form.is_valid():
+            print('valid form')
+            form.save(commit=True)
+
+            return render(request, 'accounts/change_password.html',{'form': form, 'message': 'Password has been changed!'})
+        
+    return render(request, 'accounts/change_password.html',{'form': form})
+ 
