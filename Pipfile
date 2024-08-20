@@ -10,11 +10,11 @@ mysqlclient = "==2.2.4"
 python-dotenv = "==1.0.1"
 sqlparse = "==0.5.1"
 tzdata = "==2024.1"
-pillow = "*"
+pillow = "==10.4.0"
 
 [dev-packages]
-django-extensions = "*"
-django-browser-reload = "*"
+django-browser-reload = "==1.13.0"
+django-extensions = "==3.2.3"
 
 [requires]
 python_version = "3.12"
