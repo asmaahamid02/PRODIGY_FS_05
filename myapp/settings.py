@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # apps
     'posts.apps.PostConfig',
     'accounts.apps.AccountConfig',
+    'followers.apps.FollowerConfig',
 ]
 
 MIDDLEWARE = [
