@@ -102,7 +102,7 @@ $(document).ready(function () {
               window.location.href = '/'
             }
             toggle_message('close', '', 'success')
-            reset_form()
+            reset_post_form()
             toggle_modal()
 
             $('.posts-container').prepend(htmlData)
@@ -111,6 +111,30 @@ $(document).ready(function () {
         error: (error) => {
           console.error('Post Form Error:', error)
           toggle_message('open', error.responseJSON.errors[0])
+        },
+      })
+    })
+    .on('click', '.follow-btn', function (e) {
+      e.preventDefault()
+
+      action = $(this).attr('data-action')
+
+      $(this).prop('disabled', true)
+
+      $.ajax({
+        type: 'POST',
+        url: $(this).data('url'),
+        data: {
+          action,
+        },
+        success: (data) => {
+          $(this).text(data.data.wording)
+          $(this).attr('data-action', data.data.wording.toLowerCase())
+          $(this).prop('disabled', false)
+        },
+        error: (error) => {
+          console.warn(error)
+          $(this).prop('disabled', false)
         },
       })
     })
@@ -131,7 +155,7 @@ function toggle_message(action = 'open', message = '', type = 'error') {
   }
 }
 
-function reset_form() {
+function reset_post_form() {
   $('#post-body').val('')
   $('#post-image').val('')
   $('#post-image-preview').attr('src', $('#post-image-preview').data('default'))

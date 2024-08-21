@@ -3,10 +3,20 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from .models import Post
 from .forms import PostForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Exists, OuterRef
+from followers.models import Follower
 
 @login_required
 def index_view(request: HttpRequest) -> HttpResponse:
-    posts = Post.objects.order_by('-created_at').all()[:30]
+    user = request.user
+    posts = Post.objects.order_by('-created_at').annotate(
+        is_following = Exists(
+            Follower.objects.filter(
+                followed_by = user,
+                following = OuterRef('author')
+            )
+        )
+    )[:30]
     return render(request, 'posts/index.html', {"posts": posts})
 
 @login_required
