@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse
-from .forms import RegisterForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .forms import UserProfileForm
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
+from .forms import UserProfileForm, RegisterForm
+from posts.models import Post
 
 def register_view(request: HttpRequest) -> HttpResponse:
     form = RegisterForm()
@@ -60,12 +60,12 @@ def update_profile_view(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             form.save(commit=True)
 
-            return render(request, 'accounts/update_profile.html', {
+            return render(request, 'profiles/update.html', {
                 'form': form,
                 'message': 'Profile updated successfully'
             })
 
-    return render(request, 'accounts/update_profile.html', {'form': form})
+    return render(request, 'profiles/update.html', {'form': form})
 
 @login_required
 def change_password_view(request: HttpRequest) -> HttpResponse:
@@ -83,3 +83,8 @@ def change_password_view(request: HttpRequest) -> HttpResponse:
         
     return render(request, 'accounts/change_password.html',{'form': form})
  
+@login_required
+def profile_view(request: HttpRequest, username:str) -> HttpResponse:
+    user = User.objects.get(username=username)
+    posts = Post.objects.filter(author=user)
+    return render(request, 'profiles/index.html', {"user":user, "posts": posts})

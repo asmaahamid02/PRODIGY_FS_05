@@ -25,14 +25,8 @@
           <small class="text-xs text-gray-500">{{ post.created_at|date:'M d, Y h:i A' }}</small>
         </div>
       </div>
-      {% if not request.user == post.author %}
-        <button data-action="{% if post.is_following %}un{% endif %}follow" data-url="{% url 'followers:follow' post.author.username %}" class="follow-btn cursor-pointer border-emerald-600 border-2 text-emerald-600 hover:bg-emerald-600 hover:text-white px-4 py-1 rounded-lg">
-          {% if post.is_following %}
-            Unfollow
-          {% else %}
-            Follow
-          {% endif %}
-        </button>
+      {% if not request.user == post.author and showFollowButton == True %}
+        {% include 'components/follow-button.html' with is_following=post.is_following user=post.author %}
       {% endif %}
     </div>
 

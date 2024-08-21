@@ -8,7 +8,7 @@ class Post(models.Model):
     def image_upload(self, filename):
         return f"posts/{self.author.id}/{generate_unique_folder_name()}/{filename}"
         
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post')
     body = models.CharField(max_length=500)
     image = models.ImageField(upload_to=image_upload, blank=True, null=True, validators=[image_utils.validate_image_size])
     created_at = models.DateTimeField(auto_now=True)

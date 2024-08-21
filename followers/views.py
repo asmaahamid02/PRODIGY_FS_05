@@ -54,4 +54,27 @@ def follow_view(request: HttpRequest, username:str) -> HttpResponse | JsonRespon
                     }
                 })                
 
-        return HttpResponseBadRequest(f"An error occurred while {inputs['action']}ing {other_user.username}. Try again!")
+    return HttpResponseBadRequest(f"An error occurred while {inputs['action']}ing {other_user.username}. Try again!")
+
+def get_followers_view(request:HttpRequest, username:str)-> HttpResponse:
+    print('test00')
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return HttpResponseBadRequest("User not found!")
+    
+    followers = Follower.objects.filter(following=user)
+    followers_list = [follower.followed_by for follower in followers]
+
+    return render(request, 'components/followers-list.html', {"users": followers_list, "type": "followers"}, content_type='application/html')
+
+def get_following_view(request:HttpRequest, username:str)-> JsonResponse:
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return HttpResponseBadRequest("User not found!")
+    
+    followings = Follower.objects.filter(followed_by=user)
+    following_list = [following.following for following in followings]
+
+    return render(request, 'components/followers-list.html', {"users": following_list, "type": "following"}, content_type='application/html')

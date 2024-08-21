@@ -1,0 +1,7 @@
+<button data-action="{% if is_following %}un{% endif %}follow" data-url="{% url 'followers:follow' user.username %}" class="follow-btn cursor-pointer border-emerald-600 border-2 text-emerald-600 hover:bg-emerald-600 hover:text-white text-sm px-2 py-1 rounded-lg">
+  {% if is_following %}
+    Unfollow
+  {% else %}
+    Follow
+  {% endif %}
+</button>

@@ -50,7 +50,6 @@ $(document).ready(function () {
     })
     .on('click', '.modal-toggler', function (e) {
       e.preventDefault()
-      console.log('clicked')
       toggle_modal($(this).data('modal-toggle'))
     })
     .on('click', '.alert-close', function (e) {
@@ -135,6 +134,28 @@ $(document).ready(function () {
         error: (error) => {
           console.warn(error)
           $(this).prop('disabled', false)
+        },
+      })
+    })
+    .on('click', '.get-followers-btn', function (e) {
+      e.preventDefault()
+
+      $.ajax({
+        type: 'GET',
+        url: $(this).data('url'),
+        datatype: 'json',
+        contentType: false,
+        processData: false,
+        success: (data) => {
+          const modal_id = $(this).data('modal-target')
+
+          console.log($(`#${modal_id} .modal-title`).text())
+          $(`#${modal_id} .modal-title`).text($(this).data('title'))
+
+          $('.followers-container').html(data)
+        },
+        error: (error) => {
+          console.warn(error)
         },
       })
     })
