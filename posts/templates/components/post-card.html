@@ -1,9 +1,9 @@
-<div class="post-card bg-white w-full rounded-lg shadow-lg overflow-hidden">
+<div class="post-card bg-white w-full rounded-lg shadow-lg overflow-hidden post-author-{{ post.author.username }}">
   <div class="p-4">
     <div class="flex items-center justify-between gap-2">
       <div class="flex items-center gap-4">
         {% if post.author.profile.profile_image %}
-          <img class="w-10 h-10 rounded-full" src="{{ post.author.profile.profile_image.url }}" alt="" />
+          <img class="w-10 h-10 rounded-full" src="{{ post.author.profile.profile_image.url }}" alt="{{ post.author.username }} profile Image" />
         {% else %}
           <div class="w-10 h-10 bg-gray-300 rounded-full">
             <svg class="text-gray-500 w-full file-icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" xml:space="preserve">
@@ -21,12 +21,12 @@
           </div>
         {% endif %}
         <div>
-          <h4 class="font-medium text-gray-900">{{ post.author.username }}</h4>
+          <a href="{% url 'accounts:profile' post.author.username %}" class="block cursor-pointer hover:underline font-medium text-gray-900">{{ post.author.username }}</a>
           <small class="text-xs text-gray-500">{{ post.created_at|date:'M d, Y h:i A' }}</small>
         </div>
       </div>
       {% if not request.user == post.author and showFollowButton == True %}
-        {% include 'components/follow-button.html' with is_following=post.is_following user=post.author %}
+        {% include 'components/follow-button.html' with is_followed=post.is_followed user=post.author %}
       {% endif %}
     </div>
 

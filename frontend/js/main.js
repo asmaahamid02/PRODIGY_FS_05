@@ -30,13 +30,23 @@ $.ajaxSetup({
 $(document).ready(function () {
   const sidebar = $('#main-sidebar')
   const sidebarToggler = $('.sidebar-toggler')
+  const currentUser = $('#current-user').data('user')
+
+  //manage current path
+  const pathname = window.location.pathname
+  const pathArray = pathname.split('/').filter((path) => path !== '')
+  const lastPath = pathArray[pathArray.length - 1]
+  const isHomePath = pathArray.length === 0
+  const isUserProfilePath = pathArray.length > 0 && lastPath === currentUser
 
   $(document)
+    //sidebar
     .on('click', '.sidebar-toggler', function (e) {
       e.preventDefault()
       console.log('clicked')
       sidebar.toggleClass('-translate-x-full')
     })
+    // close sidebar when click outside
     .on('click', function (e) {
       if (
         !sidebar.is(e.target) &&
@@ -48,14 +58,17 @@ $(document).ready(function () {
         sidebar.addClass('-translate-x-full')
       }
     })
+    //toggle modal
     .on('click', '.modal-toggler', function (e) {
       e.preventDefault()
       toggle_modal($(this).data('modal-toggle'))
     })
+    //close alert message
     .on('click', '.alert-close', function (e) {
       e.preventDefault()
-      $(this).parent('.alert').hide()
+      $(this).parent('.alert').addClass('hidden')
     })
+    //upload file
     .on('change', '.file-input', function (e) {
       const file = $(this)[0].files[0]
       const reader = new FileReader()
@@ -78,10 +91,17 @@ $(document).ready(function () {
 
       reader.readAsDataURL(file)
     })
+    //submit post form
     .on('submit', '#post-form', function (e) {
       e.preventDefault()
 
       const data = new FormData($(this)[0])
+
+      //check if form has data
+      if (data.get('body') === '' && data.get('image').size === 0) {
+        toggle_message('open', 'Please enter a post body or upload an image.')
+        return
+      }
 
       $.ajax({
         type: 'POST',
@@ -93,18 +113,24 @@ $(document).ready(function () {
           toggle_message('close') //error message
           toggle_message('open', '', 'success')
 
-          const pathname = window.location.pathname
-
           setTimeout(() => {
-            //if not home page, redirect to home page
-            if (pathname !== '/') {
-              window.location.href = '/'
+            //increment post count
+            if (isUserProfilePath) {
+              const oldCount = $('.posts-count').text()
+              const newCount = parseInt(oldCount) + 1
+              $('.posts-count').text(newCount)
             }
+
             toggle_message('close', '', 'success')
             reset_post_form()
             toggle_modal()
 
             $('.posts-container').prepend(htmlData)
+
+            //if not home page or current user profile, redirect to home page
+            if (!isHomePath && !isUserProfilePath) {
+              window.location.href = '/'
+            }
           }, 1000)
         },
         error: (error) => {
@@ -113,6 +139,7 @@ $(document).ready(function () {
         },
       })
     })
+    //follow/unfollow user
     .on('click', '.follow-btn', function (e) {
       e.preventDefault()
 
@@ -127,9 +154,66 @@ $(document).ready(function () {
           action,
         },
         success: (data) => {
-          $(this).text(data.data.wording)
-          $(this).attr('data-action', data.data.wording.toLowerCase())
+          const wording = action === 'follow' ? 'Unfollow' : 'Follow'
+          $(this).text(wording)
+          $(this).attr('data-action', wording.toLowerCase())
           $(this).prop('disabled', false)
+
+          const modal = $('#followers-modal')
+
+          //user that is being followed/unfollowed
+          const username = $(this).data('username')
+
+          if (isUserProfilePath) {
+            const followingsCount = $('.followings-count').text()
+            const modalType = modal.attr('data-type')
+
+            if (action === 'unfollow') {
+              //decrement followings count
+              $('.followings-count').text(parseInt(followingsCount) - 1)
+
+              const userItem = $(`#user-item-${username}`)
+              //remove user from followings list
+              if (userItem.length > 0 && modalType === 'followings') {
+                userItem.remove()
+              }
+            } else {
+              //increment followings count
+              $('.followings-count').text(parseInt(followingsCount) + 1)
+
+              const usersContainer = $('.followings-container')
+
+              //add user to followings list
+              if (modalType === 'followings') {
+                usersContainer.prepend(data)
+              }
+            }
+          } else {
+            //if on user profile page and user is being followed/unfollowed
+            if (lastPath === username) {
+              //update followers count
+              const followersCount = $('.followers-count').text()
+
+              if (action === 'unfollow') {
+                $('.followers-count').text(parseInt(followersCount) - 1)
+              } else {
+                $('.followers-count').text(parseInt(followersCount) + 1)
+              }
+            }
+          }
+
+          if (isHomePath) {
+            //update follow button on all post cards with the same author
+            const userPostCards = $(`.post-author-${username}`)
+
+            if (userPostCards.length > 1) {
+              userPostCards.each(function () {
+                const followBtn = $(this).find('.follow-btn')
+                followBtn.text(wording)
+                followBtn.attr('data-action', wording.toLowerCase())
+              })
+            }
+          }
         },
         error: (error) => {
           console.warn(error)
@@ -137,6 +221,7 @@ $(document).ready(function () {
         },
       })
     })
+    //fill followers/following list
     .on('click', '.get-followers-btn', function (e) {
       e.preventDefault()
 
@@ -147,10 +232,12 @@ $(document).ready(function () {
         contentType: false,
         processData: false,
         success: (data) => {
-          const modal_id = $(this).data('modal-target')
+          const modalId = $(this).data('modal-target')
+          const modalTitle = $(this).data('title')
 
-          console.log($(`#${modal_id} .modal-title`).text())
-          $(`#${modal_id} .modal-title`).text($(this).data('title'))
+          $(`#${modalId} .modal-title`).text(modalTitle)
+
+          $(`#${modalId}`).attr('data-type', modalTitle.toLowerCase())
 
           $('.followers-container').html(data)
         },

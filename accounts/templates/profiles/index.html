@@ -49,13 +49,7 @@
           {# Action buttons #}
           <div class="self-end">
             {% if not request.user == user %}
-              <button data-action="{% if is_followed %}un{% endif %}follow %}" data-url="{% url 'followers:follow' user.username %}" class="follow-btn cursor-pointer border-emerald-600 border-2 text-emerald-600 hover:bg-emerald-600 hover:text-white px-4 py-1 rounded-lg">
-                {% if is_followed %}
-                  Unfollow
-                {% else %}
-                  Follow
-                {% endif %}
-              </button>
+              {% include 'components/follow-button.html' with user=user is_followed=is_followed %}
             {% else %}
               <a href="{% url 'accounts:update_profile' %}" class="cursor-pointer border-emerald-600 border-2 text-emerald-600 hover:bg-emerald-600 hover:text-white px-4 py-1 rounded-lg">Update profile</a>
             {% endif %}
@@ -71,33 +65,39 @@
     {# Stats #}
     <div class="flex justify-between w-full md:w-3/5 mx-auto">
       <div class="flex flex-col items-center">
-        <span class="text-lg font-semibold text-gray-900">{{ user.post.count }}</span>
+        <span class="text-lg font-semibold text-gray-900 posts-count">{{ user.post.count }}</span>
         <span class="text-sm text-gray-500">Posts</span>
       </div>
       <button type="button" class="flex flex-col items-center get-followers-btn modal-toggler" data-modal-target="followers-modal" data-modal-toggle="followers-modal" data-url="{% url 'followers:followers_list' user.username %}" data-title="Followers">
-        <span class="text-lg font-semibold text-gray-900">{{ user.following.count }}</span>
+        <span class="text-lg font-semibold text-gray-900 followers-count">{{ user.following.count }}</span>
         <span class="text-sm text-gray-500">Followers</span>
       </button>
-      <button class="flex flex-col items-center get-followers-btn modal-toggler" data-modal-target="followers-modal" data-modal-toggle="followers-modal" data-url="{% url 'followers:following_list' user.username %}" data-title="Following">
-        <span class="text-lg font-semibold text-gray-900">{{ user.follower.count }}</span>
+      <button class="flex flex-col items-center get-followers-btn modal-toggler" data-modal-target="followers-modal" data-modal-toggle="followers-modal" data-url="{% url 'followers:following_list' user.username %}" data-title="Followings">
+        <span class="text-lg font-semibold text-gray-900 followings-count">{{ user.follower.count }}</span>
         <span class="text-sm text-gray-500">Following</span>
       </button>
     </div>
 
     {# posts #}
-    <section class="posts-container max-w-xl">
+    <section class="max-w-xl">
       <h2 class="text-lg md:text-2xl font-semibold text-gray-900 mb-4">Posts</h2>
-      {% for post in posts %}
-        {% include 'components/post-card.html' with post=post %}
-      {% empty %}
-        <div class="posts-empty-container">
-          {% include 'components/create-post-button.html' with text='Create your first post' %}
-        </div>
-      {% endfor %}
+      <div class="posts-container space-y-4">
+        {% for post in posts %}
+          {% include 'components/post-card.html' with post=post %}
+        {% empty %}
+          <div class="posts-empty-container">
+            {% if request.user == user %}
+              {% include 'components/create-post-button.html' with text='Create your first post' %}
+            {% else %}
+              <p class="text-gray-500">No posts yet</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
     </section>
   </div>
 
-  <div id="followers-modal" tabindex="-1" aria-hidden="true" class="hidden bg-black/70 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full max-h-full">
+  <div id="followers-modal" tabindex="-1" aria-hidden="true" class="hidden bg-black/70 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full max-h-full" data-type="followers">
     <div class="relative p-4 w-full max-w-md max-h-full post-modal-inner">
       <!-- Modal content -->
       <div class="relative bg-white rounded-lg shadow">
