@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from .forms import UserProfileForm, RegisterForm
 from posts.models import Post
+from followers.models import Follower
 
 def register_view(request: HttpRequest) -> HttpResponse:
     form = RegisterForm()
@@ -86,5 +87,6 @@ def change_password_view(request: HttpRequest) -> HttpResponse:
 @login_required
 def profile_view(request: HttpRequest, username:str) -> HttpResponse:
     user = User.objects.get(username=username)
-    posts = Post.objects.filter(author=user)
-    return render(request, 'profiles/index.html', {"user":user, "posts": posts})
+    posts = Post.objects.filter(author=user).order_by('-created_at')
+    is_followed = Follower.objects.filter(followed_by=request.user, following=user).exists()
+    return render(request, 'profiles/index.html', {"user":user, "posts": posts, "is_followed": is_followed})
