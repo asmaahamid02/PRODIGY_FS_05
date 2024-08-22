@@ -10,7 +10,7 @@ from followers.models import Follower
 def index_view(request: HttpRequest) -> HttpResponse:
     user = request.user
     posts = Post.objects.order_by('-created_at').annotate(
-        is_following = Exists(
+        is_followed = Exists(
             Follower.objects.filter(
                 followed_by = user,
                 following = OuterRef('author')
