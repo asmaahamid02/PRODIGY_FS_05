@@ -8,6 +8,12 @@
   <section class="posts-container max-w-2xl p-4 sm:px-6 lg:px-8 sm:py-10 mx-auto flex flex-col justify-center items-center gap-4">
     {% for post in posts %}
       {% include 'components/post-card.html' with post=post showFollowButton=True %}
+    {% empty %}
+      <div class="w-full flex flex-col items-center gap-4 posts-empty-container">
+        <h1 class="text-center text-2xl sm:text-5xl text-gray-800 font-bold">Welcome to <span class="text-emerald-600 font-extrabold">SOCIO</span></h1>
+        <p class="text-gray-500 text-base sm:text-lg">Your place to share memories, meet new friends, and explore experiences with others</p>
+        <button data-modal-target="new-post-modal" data-modal-toggle="new-post-modal" class="modal-toggler cursor-pointer border-none outline-none bg-emerald-600 text-white hover:bg-emerald-800 text-base px-6 py-2 rounded-lg">Start sharing!</button>
+      </div>
     {% endfor %}
   </section>
 {% endblock %}

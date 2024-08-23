@@ -51,7 +51,7 @@
             {% if not request.user == user %}
               {% include 'components/follow-button.html' with user=user is_followed=is_followed %}
             {% else %}
-              <a href="{% url 'accounts:update_profile' %}" class="cursor-pointer border-emerald-600 border-2 text-emerald-600 hover:bg-emerald-600 hover:text-white px-4 py-1 rounded-lg">Update profile</a>
+              <a href="{% url 'profile:update' %}" class="cursor-pointer border-emerald-600 border-2 text-emerald-600 hover:bg-emerald-600 hover:text-white px-4 py-1 rounded-lg">Update profile</a>
             {% endif %}
           </div>
         </div>

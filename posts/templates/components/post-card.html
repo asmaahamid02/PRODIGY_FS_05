@@ -21,7 +21,7 @@
           </div>
         {% endif %}
         <div>
-          <a href="{% url 'accounts:profile' post.author.username %}" class="block cursor-pointer hover:underline font-medium text-gray-900">{{ post.author.username }}</a>
+          <a href="{% url 'profiles:profile' post.author.username %}" class="block cursor-pointer hover:underline font-medium text-gray-900">{{ post.author.username }}</a>
           <small class="text-xs text-gray-500">{{ post.created_at|date:'M d, Y h:i A' }}</small>
         </div>
       </div>

@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('posts.urls', namespace='posts')),
     path('auth/', include('accounts.urls', namespace='accounts')),
+    path('profiles/', include('profiles.urls', namespace='profiles')),
     path('followers/', include('followers.urls', namespace='followers')),
     path('thumbnail/<str:size>/<path:path>', generate_thumbnail, name='generate_thumbnail'),
     path("__reload__/", include("django_browser_reload.urls")),
