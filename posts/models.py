@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_delete
 from myapp.utils.signal_utils import file_cleanup
 import os, shutil
+from myapp.utils.helper_utils import remove_image_file
 
 class Post(models.Model):
     def image_upload(self, filename):
@@ -35,15 +36,7 @@ class Post(models.Model):
         post = super().delete(*args, **kwargs)    
 
         if self.image:
-            print(self.image)
-
-            if hasattr(self.image , 'path') and os.path.exists(self.image.path):
-                print(self.image.path)
-
-                dir = self.image.path.rsplit('/', 1)[0]
-
-                if os.path.exists(dir) and os.path.isdir(dir):
-                    shutil.rmtree(dir)
+            remove_image_file(self.image)
 
         return post
     

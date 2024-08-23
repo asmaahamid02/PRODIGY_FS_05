@@ -38,7 +38,6 @@ def login_view(request: HttpRequest) -> HttpResponse:
             return redirect(next_url)
         else:
             error_message = "Invalid credentials"
-    print(error_message)
     return render(request, 'accounts/login.html', {'error': error_message})    
 
 @login_required

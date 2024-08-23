@@ -1,0 +1,11 @@
+{% extends '_base.html' %}
+
+{% block title %}
+  Socio | Show post
+{% endblock %}
+
+{% block body %}
+  <section class="max-w-2xl p-4 sm:px-6 lg:px-8 sm:py-10 mx-auto flex flex-col justify-center items-center">
+    {% include 'components/post-card.html' with post=post showFollowButton=True %}
+  </section>
+{% endblock %}

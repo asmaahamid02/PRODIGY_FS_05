@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from .models import Post
 from .forms import PostForm
@@ -54,3 +55,37 @@ def post_delete_view(request: HttpRequest ,post_id:int) -> JsonResponse:
             "status": "fail",
             "message": "Post couldn't deleted. Try again!"
         })
+
+@login_required
+def post_update_view(request: HttpRequest ,post_id:int) -> HttpResponse:
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return redirect('/')
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)    
+
+        if form.is_valid():
+            form.save(commit=True)
+
+            url = reverse('posts:show', args=[post_id])
+            return redirect(url)
+    else:
+        form = PostForm(instance=post)
+
+    return render(request, 'posts/update.html', {"post": post, "form": form})
+
+@login_required
+def post_show_view(request: HttpRequest ,post_id:int) -> HttpResponse:
+    try:
+        post = Post.objects.annotate(
+            is_followed = Exists(
+                Follower.objects.filter(followed_by=request.user, following = OuterRef('author'))
+            )
+        ).get(pk=post_id)
+
+    except Post.DoesNotExist:
+        return redirect('/')
+    
+    return render(request, 'posts/show.html', {"post": post})

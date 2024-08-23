@@ -66,8 +66,6 @@ def get_followers_view(request:HttpRequest, username:str)-> HttpResponse:
         )
     )
     followers_list = [(follower.followed_by, follower.is_followed) for follower in followers]
-    print('Followers', followers_list)
-
     return render(request, 'components/followers-list.html', {"users": followers_list, "type": "followers"}, content_type='application/html')
 
 def get_following_view(request:HttpRequest, username:str)-> JsonResponse:

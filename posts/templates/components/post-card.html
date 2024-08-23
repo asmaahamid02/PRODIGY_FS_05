@@ -24,7 +24,7 @@
           <div id="post-dropdown-menu-{{ post.id }}" class="post-dropdown z-10 hidden absolute right-0 top-6 transition text-base list-none bg-gray-100 divide-y divide-gray-50 rounded-lg shadow-md w-44">
             <ul class="py-2" aria-labelledby="post-dropdown-{{ post.id }}">
               <li>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Edit</a>
+                <a href="{% url 'posts:update' post.id %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Edit</a>
               </li>
               <li>
                 <button type="button" data-modal-target="delete-post-{{ post.id }}-modal" data-modal-toggle="delete-post-{{ post.id }}-modal" class="modal-toggler block px-4 py-2 text-sm text-red-600 hover:bg-gray-50 w-full text-left">Delete</button>

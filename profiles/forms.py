@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from typing import Any
 import os, shutil
+from myapp.utils.helper_utils import remove_image_file
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
@@ -26,22 +27,15 @@ class UserProfileForm(forms.ModelForm):
             user.profile.bio = self.cleaned_data.get('bio')
 
         if commit:
-            user.save()
-            user.profile.save()      
-            
             # Remove old images after new ones are successfully saved
             if self.cleaned_data.get('profile_image') and old_profile_image:
-                if hasattr(old_profile_image, 'path') and os.path.exists(old_profile_image.path):
-                    dir = old_profile_image.path.rsplit('/', 1)[0]
-                    if os.path.exists(dir) and os.path.isdir(dir):
-                        shutil.rmtree(dir)
+                remove_image_file(old_profile_image)
 
             if self.cleaned_data.get('cover_image') and old_cover_image:
-                if hasattr(old_cover_image, 'path') and os.path.exists(old_cover_image.path):
-                    dir = old_cover_image.path.rsplit('/', 1)[0]
-                    if os.path.exists(dir) and os.path.isdir(dir):
-                        shutil.rmtree(dir)
+                remove_image_file(old_cover_image)
             
+            user.save()
+            user.profile.save() 
         return user
 
     

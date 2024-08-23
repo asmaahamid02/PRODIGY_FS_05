@@ -19,7 +19,7 @@ def update_profile_view(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             form.save(commit=True)
 
-            return render(request, 'update.html', {
+            return render(request, 'profiles/update.html', {
                 'form': form,
                 'message': 'Profile updated successfully'
             })

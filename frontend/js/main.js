@@ -81,6 +81,7 @@ $(document).ready(function () {
       const fileInput = $(this)
       const parent = fileInput.parent('.file-input-group')
       const placeholder = parent.find('.file-placeholder')
+      const clearInput = parent.find('#clear-image')
       const placeholderIcon = parent.find('.file-icon')
 
       reader.onload = function (readerEvent) {
@@ -93,9 +94,30 @@ $(document).ready(function () {
         if (placeholderIcon && !placeholderIcon.hasClass('hidden')) {
           placeholderIcon.addClass('hidden')
         }
+
+        if (clearInput.length > 0) {
+          clearInput.prop('checked', false)
+        }
       }
 
       reader.readAsDataURL(file)
+    })
+    .on('click', '.remove-image', function (e) {
+      e.preventDefault()
+
+      console.log('clicked')
+
+      const parent = $(this).parents('.file-input-group')
+      const fileInput = parent.find('.file-input')
+      const clearInput = parent.find('#clear-image')
+
+      console.log('clearInput', clearInput)
+      const placeholder = parent.find('.file-placeholder')
+      const staticImage = placeholder.data('static')
+      placeholder.attr('src', staticImage)
+
+      fileInput.val('')
+      clearInput.prop('checked', true)
     })
 
     //requests
