@@ -10,7 +10,7 @@
       {% endblock %}
     </title>
     <link rel="stylesheet" href="{% static 'src/styles.css' %}" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
   </head>
   <body class="bg-gray-100">
     <div class="hidden" id="current-user" data-user="{{ request.user }}"></div>
