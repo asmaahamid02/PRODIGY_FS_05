@@ -28,8 +28,6 @@ $.ajaxSetup({
 })
 
 $(document).ready(function () {
-  const sidebar = $('#main-sidebar')
-  const sidebarToggler = $('.sidebar-toggler')
   const currentUser = $('#current-user').data('user')
 
   //manage current path
@@ -40,23 +38,23 @@ $(document).ready(function () {
   const isUserProfilePath = pathArray.length > 0 && lastPath === currentUser
 
   $(document)
-    //sidebar
+    .on('click', function (e) {
+      // close sidebar when click outside
+      if (!$(e.target).closest('#main-sidebar').length) {
+        $('#main-sidebar').addClass('-translate-x-full')
+      }
+
+      //close dropdowns when click outside
+      if (!$(e.target).closest('.dropdown-container').length) {
+        $('.post-dropdown').addClass('hidden')
+      }
+    })
+    //toggle sidebar
     .on('click', '.sidebar-toggler', function (e) {
+      e.stopPropagation()
       e.preventDefault()
       console.log('clicked')
-      sidebar.toggleClass('-translate-x-full')
-    })
-    // close sidebar when click outside
-    .on('click', function (e) {
-      if (
-        !sidebar.is(e.target) &&
-        sidebar.has(e.target).length === 0 &&
-        !sidebarToggler.is(e.target) &&
-        sidebarToggler.has(e.target).length === 0 &&
-        !sidebar.hasClass('-translate-x-full')
-      ) {
-        sidebar.addClass('-translate-x-full')
-      }
+      $('#main-sidebar').toggleClass('-translate-x-full')
     })
     //toggle modal
     .on('click', '.modal-toggler', function (e) {
@@ -67,6 +65,14 @@ $(document).ready(function () {
     .on('click', '.alert-close', function (e) {
       e.preventDefault()
       $(this).parent('.alert').addClass('hidden')
+    })
+    // toggle dropdown
+    .on('click', '.dropdown-toggler', function (e) {
+      e.stopPropagation()
+      e.preventDefault()
+
+      const dropdownId = $(this).data('dropdown-toggle')
+      $(`#${dropdownId}`).toggleClass('hidden').toggleClass('block')
     })
     //upload file
     .on('change', '.file-input', function (e) {
@@ -91,6 +97,9 @@ $(document).ready(function () {
 
       reader.readAsDataURL(file)
     })
+
+    //requests
+
     //submit post form
     .on('submit', '#post-form', function (e) {
       e.preventDefault()
@@ -122,8 +131,19 @@ $(document).ready(function () {
             }
 
             toggle_message('close', '', 'success')
-            reset_post_form()
+
+            $('#post-body').val('')
+            $('#post-image').val('')
+            $('#post-image-preview').attr(
+              'src',
+              $('#post-image-preview').data('default')
+            )
+
             toggle_modal()
+
+            if (isHomePath) {
+              toggle_empty_container()
+            }
 
             $('.posts-container').prepend(htmlData)
 
@@ -246,6 +266,34 @@ $(document).ready(function () {
         },
       })
     })
+    .on('click', '.delete-post-btn', function (e) {
+      e.preventDefault()
+      const url = $(this).attr('data-url')
+      const postId = $(this).attr('data-post-id')
+
+      $.ajax({
+        type: 'post',
+        url,
+        success: (data) => {
+          // post.remove()
+
+          toggle_modal($(this).attr('data-modal-toggle'))
+
+          const post = $(`#post-${postId}`)
+          if (post.length > 0) {
+            post.remove()
+          }
+
+          //just the empty div remains
+          if ($('.posts-container').children().length === 1) {
+            toggle_empty_container(false)
+          }
+        },
+        error: (error) => {
+          console.warn(`Error deleting post ${postId}`, error)
+        },
+      })
+    })
 })
 
 function toggle_message(action = 'open', message = '', type = 'error') {
@@ -263,12 +311,14 @@ function toggle_message(action = 'open', message = '', type = 'error') {
   }
 }
 
-function reset_post_form() {
-  $('#post-body').val('')
-  $('#post-image').val('')
-  $('#post-image-preview').attr('src', $('#post-image-preview').data('default'))
-}
-
 function toggle_modal(selector = 'new-post-modal') {
   $(`#${selector}`).toggleClass('hidden flex')
+}
+
+function toggle_empty_container(hide = true) {
+  if (hide) {
+    $('.posts-empty-container').addClass('hidden')
+  } else {
+    $('.posts-empty-container').removeClass('hidden')
+  }
 }

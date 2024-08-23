@@ -33,5 +33,24 @@ def post_create_view(request: HttpRequest) -> HttpResponse | JsonResponse:
     else:
         return JsonResponse({'errors': ['Invalid request method']}, status=405)
 
+@login_required
+def post_delete_view(request: HttpRequest ,post_id:int) -> JsonResponse:      
+    if request.method == 'POST':
+        try: 
+            post = Post.objects.get(pk=post_id) 
+        except Post.DoesNotExist:
+            post = None
 
-        
+
+        if post and request.user == post.author:
+            post.delete()
+
+            return JsonResponse({
+                "status": "Success",
+                "message": "Post is deleted successfully"
+            })
+
+    return JsonResponse({
+            "status": "fail",
+            "message": "Post couldn't deleted. Try again!"
+        })
