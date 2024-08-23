@@ -18,12 +18,14 @@ class PostForm(forms.ModelForm):
         ]
 
     def clean(self) -> dict[str, Any]:
-        cleaned_data = super().clean()    
-        if not cleaned_data.get('body') and not cleaned_data.get('image'):
-            raise forms.ValidationError("The post must contain either a body or an image")
-        
-        if not cleaned_data.get('body') and cleaned_data.get('clear_image'):
-            raise forms.ValidationError("The post must contain either a body or an image")
+        cleaned_data = super().clean() 
+
+        if self.is_valid():
+            if not cleaned_data.get('body') and not cleaned_data.get('image'):
+                raise forms.ValidationError("The post must contain either a body or an image")
+            
+            if not cleaned_data.get('body') and cleaned_data.get('clear_image'):
+                raise forms.ValidationError("The post must contain either a body or an image")
         
         return cleaned_data
     

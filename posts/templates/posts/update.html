@@ -39,7 +39,8 @@
 
         <!-- Body -->
         <div>
-          <textarea id="post-body" name="body" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500" placeholder="Write your thoughts...">{{ form.body.value|default_if_none:'' }}</textarea>
+          <textarea id="post-update-textarea" name="body" rows="4" maxlength="500" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500" placeholder="Write your thoughts...">{{ form.body.value|default_if_none:'' }}</textarea>
+          {% include 'components/input-error-label.html' with errors=form.body.errors %}
         </div>
 
         <!-- Image -->
