@@ -6,6 +6,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from .forms import UserProfileForm
 from posts.models import Post
 from followers.models import Follower
+from django.db.models import Q, Exists, OuterRef
 
 @login_required
 def update_profile_view(request: HttpRequest) -> HttpResponse:
@@ -23,7 +24,7 @@ def update_profile_view(request: HttpRequest) -> HttpResponse:
                 'message': 'Profile updated successfully'
             })
 
-    return render(request, 'update.html', {'form': form})
+    return render(request, 'profiles/update.html', {'form': form})
 
 @login_required
 def change_password_view(request: HttpRequest) -> HttpResponse:
@@ -46,4 +47,17 @@ def profile_view(request: HttpRequest, username:str) -> HttpResponse:
     user = User.objects.get(username=username)
     posts = Post.objects.filter(author=user).order_by('-created_at')
     is_followed = Follower.objects.filter(followed_by=request.user, following=user).exists()
-    return render(request, 'index.html', {"user":user, "posts": posts, "is_followed": is_followed})
+    return render(request, 'profiles/index.html', {"user":user, "posts": posts, "is_followed": is_followed})
+
+@login_required
+def suggested_users_view(request: HttpRequest) -> HttpResponse:
+    user = request.user
+
+    followers = Follower.objects.filter(followed_by=user)
+    usersToExclude = [follower.following.id for follower in followers]
+
+    users = User.objects.exclude(Q(pk__in=usersToExclude) | Q(pk=user.id)).annotate(
+        following_you = Exists(Follower.objects.filter(followed_by=OuterRef('pk'), following=user))
+    ).order_by('username')
+
+    return render(request, 'profiles/users.html', {"users": users})
