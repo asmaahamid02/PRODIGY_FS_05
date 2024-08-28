@@ -1,5 +1,5 @@
-{% if user.profile.profile_picture %}
-  <img src="{{ user.profile.profile_picture.url }}" alt="{{ user.username }} profile Image" class="w-full h-full object-cover rounded-full" />
+{% if user.profile.profile_image %}
+  <img src="{{ user.profile.profile_image.url }}" alt="{{ user.username }} profile Image" class="w-full h-full object-cover rounded-full" />
 {% else %}
   <svg class="text-gray-500 w-full" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" xml:space="preserve">
     <g>

@@ -14,8 +14,6 @@ class Profile(models.Model):
     cover_image = models.ImageField(upload_to=upload_path, blank=True, null=True, validators=[validate_image_size])
     profile_image = models.ImageField(upload_to=upload_path, blank=True, null=True, validators=[validate_image_size])
     bio = models.CharField(max_length=1000, blank=True, null=True)
-    likes_count = models.IntegerField(default=0)
-    followers_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:

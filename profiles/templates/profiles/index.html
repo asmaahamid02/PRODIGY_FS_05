@@ -68,7 +68,7 @@
       <h2 class="text-lg md:text-2xl font-semibold text-gray-900 mb-4">Posts</h2>
       <div class="posts-container space-y-4">
         {% for post in posts %}
-          {% include 'components/post-card.html' with post=post %}
+          {% include 'components/post-card.html' with post=post showFollowButton=False %}
         {% empty %}
           <div class="posts-empty-container">
             {% if request.user == user %}

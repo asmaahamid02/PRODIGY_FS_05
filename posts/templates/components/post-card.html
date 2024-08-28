@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between gap-2">
       <div class="flex items-center gap-4">
         <div class="w-10 h-10 rounded-full bg-gray-300">
-          {% include 'components/profile-picture.html' with user=user editable=False %}
+          {% include 'components/profile-picture.html' with user=post.author editable=False %}
         </div>
         <div>
           <a href="{% url 'profiles:profile' post.author.username %}" class="block cursor-pointer hover:underline font-medium text-gray-900">{{ post.author.username }}</a>
@@ -12,7 +12,7 @@
       </div>
       {% if not request.user == post.author and showFollowButton == True %}
         {% include 'components/follow-button.html' with is_followed=post.is_followed user=post.author %}
-      {% else %}
+      {% elif request.user == post.author %}
         <div class="relative dropdown-container">
           <button id="post-dropdown-{{ post.id }}" data-dropdown-toggle="post-dropdown-menu-{{ post.id }}" class="dropdown-toggler inline-block text-gray-500 focus:outline-none rounded-lg text-sm p-1.5" type="button">
             <span class="sr-only">Open dropdown</span>
