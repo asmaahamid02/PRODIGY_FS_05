@@ -1,12 +1,35 @@
 # Socio
 
-Socio is a simple social network application that allows users to create posts and follow other users.
+Socio is a simple social network application that allows users to seamlessly connect with each other. Users can create an account, post images, follow other users, and view their posts. The application is built using Django, MySQL and JQuery for dynamic content.
 
 ## Pre-requisites
 
 1. Python 3.x
 2. Django
 3. MySQL
+
+## Features
+
+1. User registration
+2. User login
+3. User profile
+4. User posts
+5. Follow users
+6. Image optimization and caching
+
+## Technologies
+
+1. Django
+2. MySQL
+3. HTML
+4. Tailwind CSS
+5. JQuery
+
+## Demo
+
+<img src="./readme/demo1.gif" alt="Demo" width="100%">
+<img src="./readme/demo2.gif" alt="Demo" width="100%">
+<img src="./readme/demo3.gif" alt="Demo" width="100%">
 
 ## Installation
 
@@ -65,20 +88,26 @@ Socio is a simple social network application that allows users to create posts a
    python manage.py migrate
    ```
 
-9. Create a superuser
+9. Collect static files
 
    ```bash
-   python manage.py createsuperuser
+   python manage.py collectstatic
    ```
 
-10. Run the server
+10. Create a superuser (optional)
+
+    ```bash
+    python manage.py createsuperuser
+    ```
+
+11. Run the server
 
     ```bash
     python manage.py runserver
     ```
 
-11. Collect static files
+12. Run the watcher for tailwind css
 
     ```bash
-    python manage.py collectstatic
+    npm run dev
     ```
