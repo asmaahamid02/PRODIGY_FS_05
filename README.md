@@ -1,6 +1,6 @@
 # Socio
 
-Socio is a simple social network application that allows users to seamlessly connect with each other. Users can create an account, post images, follow other users, and view their posts. The application is built using Django, MySQL and JQuery for dynamic content.
+Socio is a simple social network application that allows users to seamlessly connect with each other. Users can create an account, post images, follow other users, comment on posts, like posts, and view their posts. The application is built using Django, MySQL and JQuery for dynamic content.
 
 ## Pre-requisites
 
@@ -15,7 +15,9 @@ Socio is a simple social network application that allows users to seamlessly con
 3. User profile
 4. User posts
 5. Follow users
-6. Image optimization and caching
+6. Like posts
+7. Comment on posts
+8. Image optimization and caching
 
 ## Technologies
 
@@ -27,9 +29,10 @@ Socio is a simple social network application that allows users to seamlessly con
 
 ## Demo
 
-<img src="./readme/demo1.gif" alt="Demo" width="100%">
-<img src="./readme/demo2.gif" alt="Demo" width="100%">
-<img src="./readme/demo3.gif" alt="Demo" width="100%">
+![Demo](./readme/demo1.gif)
+![Demo](./readme/demo2.gif)
+![Demo](./readme/demo3.gif)
+![Demo](./readme/demo4.gif)
 
 ## Installation
 
