@@ -59,13 +59,16 @@
   <!-- Actions (Like and Comment) -->
   <div class="flex items-center p-4 border-t gap-4 post-actions">
     <div class="flex items-center text-gray-500 font-medium">
-      <button type="button" class="text-gray-500" data-like-url="">
-        <svg class="mr-1.5 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <button type="button"
+        class="text-gray-500 like-btn"
+        data-action="{% if post.is_liked %}unlike{% else %}like{% endif %}"
+        data-url="{% url 'interactions:like-unlike' post.id %}">
+        <svg class="mr-1.5 w-5 h-5 {% if post.is_liked %}text-red-500 fill-red-500{% endif %}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z" />
         </svg>
         <span class="sr-only">Like</span>
       </button>
-      <span class="like-count">0</span>
+      <span class="likes-count">{{ post.likes.count }}</span>
     </div>
     <button type="button" type="button" data-modal-target="comment-{{ post.id }}-modal" data-modal-toggle="comment-{{ post.id }}-modal" class="modal-toggler flex items-center text-gray-500 font-medium" data-modal-target="comment-{{ post.id }}-modal" data-modal-toggle="comment-{{ post.id }}-modal">
       <svg class="mr-1.5 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

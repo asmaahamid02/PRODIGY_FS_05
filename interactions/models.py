@@ -42,3 +42,15 @@ class Comment(models.Model):
             remove_image_file(self.image)
 
         return comment    
+
+class Like(models.Model):
+
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_by')
+    created_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f"{self.id} - {self.user.username} - {self.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
+    
+    class Meta:
+        unique_together = ['post', 'user']

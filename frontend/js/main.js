@@ -300,6 +300,7 @@ $(document).ready(function () {
         },
       })
     })
+    //delete post
     .on('click', '.delete-post-btn', function (e) {
       e.preventDefault()
       const url = $(this).attr('data-url')
@@ -328,6 +329,7 @@ $(document).ready(function () {
         },
       })
     })
+    //create comment
     .on('submit', '.create-comment-form', function (e) {
       e.preventDefault()
 
@@ -372,9 +374,11 @@ $(document).ready(function () {
 
       btn.prop('disabled', false)
     })
+    //close toast
     .on('click', '#toast-close', function (e) {
       hideToast()
     })
+    //delete comment
     .on('click', '.delete-card-btn', function (e) {
       e.preventDefault()
       const url = $(this).attr('data-url')
@@ -406,6 +410,54 @@ $(document).ready(function () {
         error: (error) => {
           console.warn(`Error deleting`, error)
           openToast(error?.responseJSON?.errors[0] || error?.statusText)
+        },
+      })
+    })
+    //like/unlike
+    .on('click', '.like-btn', function (e) {
+      e.preventDefault()
+
+      action = $(this).attr('data-action')
+
+      console.log('action', action)
+
+      $(this).prop('disabled', true)
+
+      $.ajax({
+        type: 'POST',
+        url: $(this).data('url'),
+        data: {
+          action,
+        },
+
+        success: (data) => {
+          const wording = action === 'like' ? 'unlike' : 'like'
+          $(this).attr('data-action', wording)
+          $(this).prop('disabled', false)
+
+          const container = $(this).parents('.post-card').find('.likes-count')
+          console.log('container', container)
+          if (action === 'like') {
+            container.text(parseInt(container.text()) + 1)
+          } else {
+            container.text(
+              parseInt(container.text()) > 0
+                ? parseInt(container.text()) - 1
+                : 0
+            )
+          }
+
+          $(this).children('svg').toggleClass('fill-red-500 text-red-500')
+        },
+        error: (error) => {
+          console.warn(error)
+          $(this).prop('disabled', false)
+
+          const errorText =
+            error.status === 400
+              ? error?.responseText
+              : error?.responseJSON?.errors[0] || error?.statusText
+          openToast(errorText)
         },
       })
     })

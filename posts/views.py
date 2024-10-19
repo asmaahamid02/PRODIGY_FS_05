@@ -6,6 +6,7 @@ from .forms import PostForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
 from followers.models import Follower
+from interactions.models import Like
 
 @login_required
 def index_view(request: HttpRequest) -> HttpResponse:
@@ -15,6 +16,12 @@ def index_view(request: HttpRequest) -> HttpResponse:
             Follower.objects.filter(
                 followed_by = user,
                 following = OuterRef('author')
+            )
+        ),
+        is_liked = Exists(
+            Like.objects.filter(
+                user = user,
+                post = OuterRef('pk')
             )
         )
     )[:30]
