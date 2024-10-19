@@ -1,0 +1,7 @@
+<div class="comments-container grid grid-cols-1 gap-4 divide-y divide-gray-200">
+  {% for comment in comments %}
+    {% include 'components/comment-card.html' with comment=comment %}
+  {% empty %}
+    <p class="text-center text-gray-700 comments-empty-container">No comments yet, be the first..</p>
+  {% endfor %}
+</div>

@@ -8,13 +8,13 @@
   <div class="max-w-5xl p-4 sm:px-6 lg:px-8 sm:py-10 space-y-4">
     <div class="flex justify-between gap-2">
       <a href="{% url 'profiles:profile' request.user.username %}" class="text-emerald-700 hover:underline flex items-center">
-        <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg class="w-5 h-5 text-inherit" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4" />
         </svg>Back to profile
       </a>
 
       <a href="{% url 'profiles:change_password' %}" class="text-emerald-700 hover:underline flex items-center">
-        Change password<svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        Change password<svg class="w-5 h-5 text-inherit" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4" />
         </svg>
       </a>
@@ -23,7 +23,7 @@
       {% csrf_token %}
       <div>
         {# Cover image #}
-        <label for="cover_image" class="block cursor-pointer w-full h-40 md:h-60 bg-gray-200 rounded-lg overflow-hidden file-input-group">
+        <label for="cover_image" class="block cursor-pointer w-full h-40 md:h-60 bg-gray-200 rounded-lg overflow-hidden file-input-group" data-removable="false">
           <input type="file" name="cover_image" id="cover_image" class="hidden file-input" />
           {% with cover_image=user.profile.cover_image %}
             <img data-default="{% if cover_image %}

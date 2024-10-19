@@ -44,19 +44,19 @@
         </div>
 
         <!-- Image -->
-        <div class="relative w-full rounded-b-lg overflow-hidden file-input-group">
+        <div class="relative w-full rounded-b-lg overflow-hidden file-input-group" data-removable="false">
           <input type="file" id="edit-post-image" name="image" class="hidden file-input" />
-          <input type="checkbox" class="hidden" id="clear-image" name="clear_image" />
+          <input type="checkbox" class="hidden file-clear" name="clear_image" />
 
           <div class="flex justify-between absolute top-0 left-0 w-full px-2 py-1">
             <label for="edit-post-image" class="inline-flex shadow items-center justify-center p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer">
-              <svg class="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 me-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                 <path fill-rule="evenodd" d="M12 3a1 1 0 0 1 .78.375l4 5a1 1 0 1 1-1.56 1.25L13 6.85V14a1 1 0 1 1-2 0V6.85L8.78 9.626a1 1 0 1 1-1.56-1.25l4-5A1 1 0 0 1 12 3ZM9 14v-1H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-4v1a3 3 0 1 1-6 0Zm8 2a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z" clip-rule="evenodd" />
               </svg>Update Image
             </label>
-            <button type="button" class="remove-image shadow rounded-lg p-2.5 text-center bg-gray-100 text-gray-500 hover:text-gray-700">
+            <button type="button" class="file-remove shadow rounded-lg p-2.5 text-center bg-gray-100 text-gray-500 hover:text-gray-700">
               <span class="sr-only">Remove image</span>
-              <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
               </svg>
             </button>
@@ -82,7 +82,7 @@
             alt="Post image" />
         </div>
         <button type="submit" class="post-form-submit text-white inline-flex items-center bg-emerald-700 hover:bg-emerald-800 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-          <svg class="me-1 -ms-1 w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg class="me-1 -ms-1 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.779 17.779 4.36 19.918 6.5 13.5m4.279 4.279 8.364-8.643a3.027 3.027 0 0 0-2.14-5.165 3.03 3.03 0 0 0-2.14.886L6.5 13.5m4.279 4.279L6.499 13.5m2.14 2.14 6.213-6.504M12.75 7.04 17 11.28" />
           </svg>Update
         </button>

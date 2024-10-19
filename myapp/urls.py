@@ -26,6 +26,7 @@ urlpatterns = [
     path('auth/', include('accounts.urls', namespace='accounts')),
     path('profiles/', include('profiles.urls', namespace='profiles')),
     path('followers/', include('followers.urls', namespace='followers')),
+    path('interactions/', include('interactions.urls', namespace='interactions')),
     path('thumbnail/<str:size>/<path:path>', generate_thumbnail, name='generate_thumbnail'),
     path("__reload__/", include("django_browser_reload.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

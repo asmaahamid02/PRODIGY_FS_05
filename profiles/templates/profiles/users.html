@@ -6,31 +6,35 @@
 
 {% block body %}
   <div class="max-w-5xl p-4 sm:px-6 lg:px-8 sm:py-10 space-y-4">
-    <div class="grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] gap-x-4 gap-y-6">
-      {% for user in users %}
-        <div class="rounded-3xl overflow-hidden shadow-xl bg-white flex items-center flex-col">
-          <div class="w-full h-32 bg-gray-200 rounded-lg overflow-hidden">
-            {% if user.profile.cover_image %}
-              <img src="{{ user.profile.cover_image.url }}" class="object-cover w-full h-full" alt="{{ user.username }} Cover Image" />
-            {% endif %}
-          </div>
-          <div class="flex justify-center -mt-8 w-20 h-20 rounded-full bg-gray-300 border-4 border-white items-center">
-            {% include 'components/profile-picture.html' with user=user editable=False %}
-          </div>
+    {% if users %}
+      <div class="grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] gap-x-4 gap-y-6">
+        {% for user in users %}
+          <div class="rounded-3xl overflow-hidden shadow-xl bg-white flex items-center flex-col">
+            <div class="w-full h-32 bg-gray-200 rounded-lg overflow-hidden">
+              {% if user.profile.cover_image %}
+                <img src="{{ user.profile.cover_image.url }}" class="object-cover w-full h-full" alt="{{ user.username }} Cover Image" />
+              {% endif %}
+            </div>
+            <div class="flex justify-center -mt-8 w-20 h-20 rounded-full bg-gray-300 border-4 border-white items-center">
+              {% include 'components/profile-picture.html' with user=user editable=False %}
+            </div>
 
-          <div class="pt-1 px-4 pb-4 text-center space-y-2">
-            <h3 class="text-gray-900 bold font-sans">@{{ user.username }}</h3>
+            <div class="pt-1 px-4 pb-4 text-center space-y-2">
+              <h3 class="text-gray-900 bold font-sans">@{{ user.username }}</h3>
 
-            {% if user.following_you %}
-              <p class="text-sm text-gray-500">{{ user.username }} follows you</p>
-            {% endif %}
+              {% if user.following_you %}
+                <p class="text-sm text-gray-500">{{ user.username }} follows you</p>
+              {% endif %}
 
-            {% if request.user != user %}
-              {% include 'components/follow-button.html' with user=user is_followed=False %}
-            {% endif %}
+              {% if request.user != user %}
+                {% include 'components/follow-button.html' with user=user is_followed=False %}
+              {% endif %}
+            </div>
           </div>
-        </div>
-      {% endfor %}
-    </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-center text-gray-700">No users found</p>
+    {% endif %}
   </div>
 {% endblock %}

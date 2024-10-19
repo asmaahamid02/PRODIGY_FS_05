@@ -1,11 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm
-from posts.models import Post
-from followers.models import Follower
 
 def register_view(request: HttpRequest) -> HttpResponse:
     form = RegisterForm()
@@ -47,8 +44,3 @@ def logout_view(request: HttpRequest) -> HttpResponse:
         return redirect('accounts:login')
     else:
         return redirect('/')
-
-    user = User.objects.get(username=username)
-    posts = Post.objects.filter(author=user).order_by('-created_at')
-    is_followed = Follower.objects.filter(followed_by=request.user, following=user).exists()
-    return render(request, 'profiles/index.html', {"user":user, "posts": posts, "is_followed": is_followed})

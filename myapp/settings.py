@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 
     #packages
     'django_browser_reload',
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'profiles.apps.ProfilesConfig',
     'followers.apps.FollowersConfig',
+    'interactions.apps.InteractionsConfig',
 ]
 
 MIDDLEWARE = [

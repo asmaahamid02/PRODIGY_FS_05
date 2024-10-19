@@ -46,7 +46,7 @@ $(document).ready(function () {
 
       //close dropdowns when click outside
       if (!$(e.target).closest('.dropdown-container').length) {
-        $('.post-dropdown').addClass('hidden')
+        $('.dropdown-menu').addClass('hidden')
       }
     })
     //toggle sidebar
@@ -81,7 +81,7 @@ $(document).ready(function () {
       const fileInput = $(this)
       const parent = fileInput.parent('.file-input-group')
       const placeholder = parent.find('.file-placeholder')
-      const clearInput = parent.find('#clear-image')
+      const clearInput = parent.find('.file-clear')
       const placeholderIcon = parent.find('.file-icon')
 
       reader.onload = function (readerEvent) {
@@ -98,26 +98,38 @@ $(document).ready(function () {
         if (clearInput.length > 0) {
           clearInput.prop('checked', false)
         }
+
+        if (parent.hasClass('hidden')) {
+          parent.removeClass('hidden')
+        }
       }
 
       reader.readAsDataURL(file)
     })
-    .on('click', '.remove-image', function (e) {
+    .on('click', '.file-remove', function (e) {
       e.preventDefault()
 
       console.log('clicked')
 
       const parent = $(this).parents('.file-input-group')
       const fileInput = parent.find('.file-input')
-      const clearInput = parent.find('#clear-image')
+      const clearInput = parent.find('.file-clear')
+      const isRemovable = parent.data('removable')
 
-      console.log('clearInput', clearInput)
       const placeholder = parent.find('.file-placeholder')
       const staticImage = placeholder.data('static')
       placeholder.attr('src', staticImage)
 
       fileInput.val('')
-      clearInput.prop('checked', true)
+
+      if (clearInput.length > 0) {
+        clearInput.prop('checked', true)
+      }
+
+      if (isRemovable) {
+        console.log('removable', typeof isRemovable)
+        parent.addClass('hidden')
+      }
     })
 
     //requests
@@ -316,6 +328,87 @@ $(document).ready(function () {
         },
       })
     })
+    .on('submit', '.create-comment-form', function (e) {
+      e.preventDefault()
+
+      const data = new FormData($(this)[0])
+      const btn = $(this).find('[type=submit]')
+      btn.prop('disabled', true)
+      //check if form has data
+      if (data.get('content') === '' && data.get('image').size === 0) {
+        openToast('Please enter a comment content or upload an image.')
+
+        btn.prop('disabled', false)
+
+        return
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: $(this).data('url'),
+        data,
+        processData: false,
+        contentType: false,
+        success: (htmlData) => {
+          setTimeout(() => {
+            $(this).find('.comment-content').val('')
+            $(this).find('.file-input').val('')
+            $(this)
+              .find('.file-preview')
+              .attr('src', $('.file-preview').data('default'))
+            $(this).find('.file-input-group').addClass('hidden')
+            toggle_empty_container(true, 'comment')
+
+            updateCommentsCount($(this), 'increment')
+
+            $('.comments-container').prepend(htmlData)
+          }, 100)
+        },
+        error: (error) => {
+          console.error('Comment Form Error:', error)
+          openToast(error.responseJSON.errors[0])
+        },
+      })
+
+      btn.prop('disabled', false)
+    })
+    .on('click', '#toast-close', function (e) {
+      hideToast()
+    })
+    .on('click', '.delete-card-btn', function (e) {
+      e.preventDefault()
+      const url = $(this).attr('data-url')
+      const id = $(this).attr('data-id')
+      const key = $(this).attr('data-key')
+
+      $.ajax({
+        type: 'post',
+        url,
+        success: (data) => {
+          toggle_modal($(this).attr('data-modal-toggle'))
+
+          const card = $(`#${key}-${id}`)
+          if (card.length > 0) {
+            console.log(card)
+            card.remove()
+          }
+
+          //update comments count
+          if (key === 'comment') {
+            updateCommentsCount($(this), 'decrement')
+          }
+
+          //just the empty div remains
+          if ($(`.${key}s-container`).children().length === 1) {
+            toggle_empty_container(false, key)
+          }
+        },
+        error: (error) => {
+          console.warn(`Error deleting`, error)
+          openToast(error?.responseJSON?.errors[0] || error?.statusText)
+        },
+      })
+    })
 })
 
 function toggle_message(action = 'open', message = '', type = 'error') {
@@ -334,13 +427,73 @@ function toggle_message(action = 'open', message = '', type = 'error') {
 }
 
 function toggle_modal(selector = 'new-post-modal') {
-  $(`#${selector}`).toggleClass('hidden flex')
+  const modal = $(`#${selector}`)
+  modal.toggleClass('hidden flex')
+
+  const fetchUrl = modal.attr('data-fetch-url')
+
+  if (fetchUrl && !modal.hasClass('hidden')) {
+    const dataContainer = modal.find('.data-container')
+    const loader = modal.find('.loader-container')
+
+    loader.toggleClass('hidden flex')
+
+    $.ajax({
+      type: 'get',
+      url: fetchUrl,
+      contentType: false,
+      success: (data) => {
+        toggle_empty_container(false, 'comment')
+
+        dataContainer.html(data)
+
+        loader.toggleClass('hidden flex')
+      },
+
+      error: (error) => {
+        console.warn(`Error fetching data`, error)
+        loader.toggleClass('hidden flex')
+      },
+    })
+  }
 }
 
-function toggle_empty_container(hide = true) {
+function toggle_empty_container(hide = true, key = 'post') {
   if (hide) {
-    $('.posts-empty-container').addClass('hidden')
+    $(`.${key}s-empty-container`).addClass('hidden')
   } else {
-    $('.posts-empty-container').removeClass('hidden')
+    $(`.${key}s-empty-container`).removeClass('hidden')
+  }
+}
+
+function loadComments(postId) {
+  console.log('loadComments', postId)
+}
+
+function openToast(message, variant = 'error') {
+  $('#toast').removeClass('hidden')
+  $('#toast').addClass(`${variant} show`)
+  $('#toast-message').text(message)
+}
+
+function hideToast() {
+  $('#toast').addClass('hidden')
+  $('#toast-message').text()
+}
+
+function updateCommentsCount(child, action = 'increment') {
+  const postId = child.data('post-id')
+  let container = child.parents('.post-card').find('.comments-count')
+
+  if (!container.length && postId) {
+    container = $(`#post-${postId}`).find('.comments-count')
+  }
+
+  if (action === 'increment') {
+    container.text(parseInt(container.text()) + 1)
+  } else {
+    container.text(
+      parseInt(container.text()) > 0 ? parseInt(container.text()) - 1 : 0
+    )
   }
 }
